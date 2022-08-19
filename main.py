@@ -30,7 +30,7 @@ def precoEstado(estado):
   
   #Laço de repetição para verificar o estado e se o produto é a gasolina comum.
   for linha in range(len(preco_df)):
-    if preco_df['ESTADO'][linha] == estado: 
+    if preco_df['ESTADO'][linha] == estado:
       if preco_df['PRODUTO'][linha] == 'GASOLINA COMUM':
           precos_medios.append(preco_df['PREÇO MÉDIO REVENDA'][linha]) #adiciona a linha atual depois de passar pelas condições.
 
@@ -39,7 +39,9 @@ def precoEstado(estado):
   for linha in range(len(preco_df)):
     if preco_df['ESTADO'][linha] == estado:
       if preco_df['PRODUTO'][linha] == 'GASOLINA COMUM':
-        datas_finais.append(preco_df['DATA FINAL'][linha])
+        data = preco_df['DATA FINAL'][linha]
+        if data.startswith("2010"):
+          datas_finais.append(preco_df['DATA FINAL'][linha])
 
   #Cria um dicionario com todos os valores das listas.
   valores_estado = {'DATA': datas_finais,
@@ -63,4 +65,7 @@ def media(dataframe):
   return print(media)
 
 
-precoEstado('PARANA')
+tabela_estado = precoEstado('DISTRITO FEDERAL')
+
+print(f'A media geral: {media(tabela_estado)}')
+print(tabela_estado)
