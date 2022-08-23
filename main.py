@@ -19,9 +19,9 @@ def precoEstado(estado, ano):
     if preco_df['ESTADO'][linha] == estado:
       if preco_df['PRODUTO'][linha] == 'GASOLINA COMUM':
         data = preco_df['DATA FINAL'][linha]
-        if data[:4] == str(ano): 
-          precos_medios.append(preco_df['PREÇO MÉDIO REVENDA'][linha]) #adiciona a linha atual depois de passar pelas condições.
-          datas_finais.append(preco_df['DATA FINAL'][linha])
+        if data[:4] == str(ano):   #comparando data com o ano
+          precos_medios.append(preco_df['PREÇO MÉDIO REVENDA'][linha]) #adiciona o preço atual depois de passar pelas condições.
+          datas_finais.append(preco_df['DATA FINAL'][linha]) #adiciona a data atual depois de passar pelas condições.
           
 
   #Cria um dicionario com todos os valores das listas.
@@ -38,7 +38,7 @@ def media(dataframe):
   soma_preco = 0
 
   for linha in range(len(dataframe)):
-    soma_preco += dataframe['PREÇO MÉDIO REVENDA'][linha]
+    soma_preco += dataframe['PREÇO MÉDIO REVENDA'][linha] #soma_preço = soma_preço + dataframe['PREÇO MÉDIO REVENDA'][linha]
     qtd_valores += 1
     
   media = soma_preco / qtd_valores
@@ -61,6 +61,7 @@ medias_por_ano = {'ANO': lista_de_anos,
                  'PREÇO MÉDIO REVENDA': lista_de_medias}
 
 tabela_completa = pd.DataFrame(medias_por_ano) #cria um dataframe a partir do dicionario.
+
 
 
 fig = px.line(tabela_completa, x='ANO', y='PREÇO MÉDIO REVENDA', title='Preços Médios de Revenda da Gasolina Comum no Distrito Federal.')
