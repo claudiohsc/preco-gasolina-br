@@ -1,8 +1,9 @@
 import pandas as pd
 import plotly
 import plotly.express as px
+from dash import Dash, dcc, html, Input, Output
 
-preco_df = pd.read_csv('2004-2021.csv')
+preco_df = pd.read_csv('datasets/2004-2021.csv')
 
 
 def precoEstado(estado, ano):
@@ -49,20 +50,59 @@ def media(dataframe):
 lista_de_anos = []
 lista_de_medias = []
 
-for ano in range(2004, 2022):
-  media_anual = 0
-  df_estado = precoEstado('DISTRITO FEDERAL', ano) #Cria a tabela de acordo com o ano e o Estado.
-  media_anual = media(df_estado)
+def media_geral_anual(estado):
+  for ano in range(2004, 2022):
+    media_anual = 0
+    df_estado = precoEstado(estado, ano) #Cria a tabela de acordo com o ano e o Estado.
+    media_anual = media(df_estado)
 
-  lista_de_anos.append(ano) #adiciona os anos em uma lista.
-  lista_de_medias.append(media_anual) #adiciona as medias em uma lista.
+    lista_de_anos.append(ano) #adiciona os anos em uma lista.
+    lista_de_medias.append(media_anual) #adiciona as medias em uma lista.
 
-medias_por_ano = {'ANO': lista_de_anos,
-                 'PREÇO MÉDIO REVENDA': lista_de_medias}
+  medias_por_ano = {'ANO': lista_de_anos,
+                  'PREÇO MÉDIO REVENDA': lista_de_medias}
 
-tabela_completa = pd.DataFrame(medias_por_ano) #cria um dataframe a partir do dicionario.
+  tabela_completa = pd.DataFrame(medias_por_ano) #cria um dataframe a partir do dicionario.
+
+  return tabela_completa
+
+tabela_padrao = media_geral_anual('DISTRITO FEDERAL')
+
+fig = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.')
+
+lista_estados = ['ACRE', 'ALAGOAS', 'AMAPA', 'AMAZONAS', 'BAHIA', 'CEARA','DISTRITO FEDERAL', 'ESPIRITO SANTO',
+'GOIAS', 'MARANHAO', 'MATO GROSSO', 'MATO GROSSO DO SUL', 'MINAS GERAIS', 'PARA', 'PARAIBA', 'PARANA', 
+'PERNAMBUCO', 'PIAUI', 'RIO DE JANEIRO', 'RIO GRANDE DO NORTE', 'RIO GRANDE DO SUL', 'RONDONIA', 'RORAIMA', 'SANTA CATARINA', 'SAO PAULO', 'SERGIPE', 'TOCANTINS']
+
+#Parte dashboard
+
+app = Dash(__name__)
+
+app.layout = html.Div([
+    html.H1("Dashboard Gasolina no Brasil."),
+    html.H3("Dashboard das médias dos preços da gasolina por Estado."),
+    
+    dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados"),
+
+    dcc.Graph(
+      id='grafico-medias',
+      figure = fig
+    )
+])
 
 
+@app.callback(
+    Output('grafico-medias', 'figure'),
+    Input('lista-estados', 'value')
+)
 
-fig = px.line(tabela_completa, x='ANO', y='PREÇO MÉDIO REVENDA', title='Preços Médios de Revenda da Gasolina Comum no Distrito Federal.')
-fig.show()
+def update_output(value):
+  tabela_filtrada = media_geral_anual(value)
+
+  fig = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.')
+
+  return fig
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
