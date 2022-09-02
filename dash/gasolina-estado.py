@@ -5,7 +5,6 @@ from dash import Dash, dcc, html, Input, Output
 
 preco_df = pd.read_csv('datasets/2004-2021.csv')
 
-
 def precoEstado(estado, ano):
   '''
     Função que retorna o valores da tabela de um Estado.
@@ -46,11 +45,12 @@ def media(dataframe):
   
   return media
 
-#criando listas para armezenar os anos e as médias
-lista_de_anos = []
-lista_de_medias = []
 
 def media_geral_anual(estado):
+  #criando listas para armezenar os anos e as médias
+  lista_de_anos = []
+  lista_de_medias = []
+
   for ano in range(2004, 2022):
     media_anual = 0
     df_estado = precoEstado(estado, ano) #Cria a tabela de acordo com o ano e o Estado.
@@ -81,12 +81,12 @@ app = Dash(__name__)
 app.layout = html.Div([
     html.H1("Dashboard Gasolina no Brasil."),
     html.H3("Dashboard das médias dos preços da gasolina por Estado."),
-    
+    html.P("Selecione o Estado abaixo:"),
     dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados"),
 
     dcc.Graph(
       id='grafico-medias',
-      figure = fig
+      figure=fig
     )
 ])
 
@@ -96,7 +96,7 @@ app.layout = html.Div([
     Input('lista-estados', 'value')
 )
 
-def update_output(value):
+def update_graph(value):
   tabela_filtrada = media_geral_anual(value)
 
   fig = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.')
