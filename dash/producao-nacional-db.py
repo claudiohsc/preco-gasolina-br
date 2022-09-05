@@ -29,14 +29,11 @@ def tabela_por_estado(df_, estado, ano):
   return tabela_final
 
 
-
 tabela_producao = tabela_por_estado(df, 'RIO DE JANEIRO', 2017) #recebe os dois valores: producao e mês
-
 
 # foi criado o grafico usando o plotly. no eixo x é o mes, no eixo y é a produção 
 
 fig = px.bar(tabela_producao, x='MÊS', y='PRODUÇÃO', title=('PRODUÇÃO DE BARRIS DE PETRÓLEO POR MÊS     ESTADO: RIO DE JANEIRO     ANO: 2017'))
-
 
 
 #começo do dash
@@ -61,28 +58,20 @@ app.layout = html.Div([
     )
 ])
 
-@app.callback(
-  Input('lista-estados', 'value'),   
-)
-
-def update_state(value):
-  estado = value
-  
-  return estado
 
 @app.callback(
   Output('grafico-producao', 'figure'), 
+  Input('lista-estados', 'value'),
   Input('anos', 'value')
 )
 
-def update_graph(value):
-  estado = update_state()
-  tabela_estado = tabela_por_estado(df, estado, int(value)) #recebe os dois valores: producao e mês
-
-  fig = px.line(tabela_estado, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.')
+def update_graph(lista_estados, anos):
+  
+  tabela_estado = tabela_por_estado(df, lista_estados, int(anos)) #recebe os dois valores: producao e mês
+  
+  fig = px.line(tabela_estado, x='MÊS', y='PRODUÇÃO', title=f'Preços Médios de Revenda da Gasolina Comum em {lista_estados}.')
 
   return fig
-
 
 
 if __name__ == '__main__':

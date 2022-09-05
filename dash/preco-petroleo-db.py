@@ -62,7 +62,6 @@ fig1 = px.line(tabela_medias, x='Ano', y='Média do Ano', title='Média anual do
 fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Preço do Petróleo')   #Gráfico da Média por Mês
 
 
-
 app = Dash(__name__)
 
 app.layout = html.Div([
@@ -82,6 +81,7 @@ app.layout = html.Div([
     Output('grafico-preco', 'figure'),
     Input('lista-anos', 'value')
 )
+
 
 def update_graph(value):
   tabela_ano = valoresAno(preco_petroleo, int(value))
