@@ -69,7 +69,7 @@ def update_graph(lista_estados, anos):
   
   tabela_estado = tabela_por_estado(df, lista_estados, int(anos)) #recebe os dois valores: producao e mês
   
-  fig = px.line(tabela_estado, x='MÊS', y='PRODUÇÃO', title=f'Preços Médios de Revenda da Gasolina Comum em {lista_estados}.')
+  fig = px.bar(tabela_estado, x='MÊS', y='PRODUÇÃO', title=f'Preços Médios de Revenda da Gasolina Comum em {lista_estados}.')
 
   return fig
 
