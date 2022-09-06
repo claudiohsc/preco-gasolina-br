@@ -65,11 +65,11 @@ fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Pre�
 app = Dash(__name__)
 
 app.layout = html.Div([
-    html.H1("Dashboard Preço do Petróleo."),
+    html.H1("Dashboard Preço do Petróleo.", style={'text-align': 'center'}),
     html.H3("Dashboard do preço do Petróleo ao longo de 20 anos."),
     html.P("Selecione o ano abaixo:"),
-    dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
-
+    dcc.Dropdown(lista_anos, value="2002", id="lista-anos", style={'width': '40%'}),
+    html.Br(),
     dcc.Graph(
       id='grafico-preco',
       figure=fig2
@@ -86,7 +86,7 @@ app.layout = html.Div([
 def update_graph(value):
   tabela_ano = valoresAno(preco_petroleo, int(value))
 
-  fig2 = px.line(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}')   #Gráfico da Média por Mês
+  fig2 = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark')   #Gráfico da Média por Mês
 
   return fig2
 
