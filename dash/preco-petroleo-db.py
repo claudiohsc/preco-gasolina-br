@@ -66,15 +66,27 @@ fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Pre�
 app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = html.Div([
-    html.H1("Dashboard Preço do Petróleo.", style={'text-align': 'center'}),
-    html.H3("Dashboard do preço do Petróleo ao longo de 20 anos."),
-    html.P("Selecione o ano abaixo:"),
-    dcc.Dropdown(lista_anos, value="2002", id="lista-anos", style={'width': '40%'}),
-    html.Br(),
-    dcc.Graph(
-      id='grafico-preco',
-      figure=fig2
-    )
+  dbc.Row([
+    dbc.Col([
+    html.H3("Dashboard Preço do Petróleo.", className='text-center text-primary'),
+    html.H5("Dashboard do preço do Petróleo ao longo de 20 anos."),
+    html.P("Selecione o ano abaixo:")
+    ])
+    
+  ]),
+  dbc.Row([
+    dbc.Col([
+      dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
+      dcc.Graph(id='grafico-preco',
+      figure=fig2)
+    
+
+  ], width={'size': 6}),
+  dbc.Row([
+    
+    ])
+  ])
+    
 ])
 
 
