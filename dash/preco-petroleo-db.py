@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
+import dash_bootstrap_components as dbc
 
 
 preco_petroleo = pd.read_excel('datasets/Preco_do_petroleo.xlsx')
@@ -62,7 +63,7 @@ fig1 = px.line(tabela_medias, x='Ano', y='Média do Ano', title='Média anual do
 fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Preço do Petróleo')   #Gráfico da Média por Mês
 
 
-app = Dash(__name__)
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = html.Div([
     html.H1("Dashboard Preço do Petróleo.", style={'text-align': 'center'}),
