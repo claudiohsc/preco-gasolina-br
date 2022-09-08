@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
+import dash_bootstrap_components as dbc
 
 
 preco_petroleo = pd.read_excel('datasets/Preco_do_petroleo.xlsx')
@@ -62,18 +63,30 @@ fig1 = px.line(tabela_medias, x='Ano', y='Média do Ano', title='Média anual do
 fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Preço do Petróleo')   #Gráfico da Média por Mês
 
 
-app = Dash(__name__)
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = html.Div([
-    html.H1("Dashboard Preço do Petróleo."),
-    html.H3("Dashboard do preço do Petróleo ao longo de 20 anos."),
-    html.P("Selecione o ano abaixo:"),
-    dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
+  dbc.Row([
+    dbc.Col([
+    html.H3("Dashboard Preço do Petróleo.", className='text-center text-primary'),
+    html.H5("Dashboard do preço do Petróleo ao longo de 20 anos."),
+    html.P("Selecione o ano abaixo:")
+    ])
+    
+  ]),
+  dbc.Row([
+    dbc.Col([
+      dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
+      dcc.Graph(id='grafico-preco',
+      figure=fig2)
+    
 
-    dcc.Graph(
-      id='grafico-preco',
-      figure=fig2
-    )
+  ], width={'size': 6}),
+  dbc.Row([
+    
+    ])
+  ])
+    
 ])
 
 
@@ -86,7 +99,7 @@ app.layout = html.Div([
 def update_graph(value):
   tabela_ano = valoresAno(preco_petroleo, int(value))
 
-  fig2 = px.line(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}')   #Gráfico da Média por Mês
+  fig2 = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark')   #Gráfico da Média por Mês
 
   return fig2
 
