@@ -128,7 +128,7 @@ def media_geral_anual(estado):
 
 tabela_padrao = media_geral_anual('DISTRITO FEDERAL')
 
-fig = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.')
+fig = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.', template="plotly_dark")
 
 lista_estados = ['ACRE', 'ALAGOAS', 'AMAPA', 'AMAZONAS', 'BAHIA', 'CEARA','DISTRITO FEDERAL', 'ESPIRITO SANTO',
 'GOIAS', 'MARANHAO', 'MATO GROSSO', 'MATO GROSSO DO SUL', 'MINAS GERAIS', 'PARA', 'PARAIBA', 'PARANA', 
@@ -140,20 +140,22 @@ lista_estados = ['ACRE', 'ALAGOAS', 'AMAPA', 'AMAZONAS', 'BAHIA', 'CEARA','DISTR
 
 #Parte do dash: juntado os graficos
 
+#layout funciona com linhas, e cada linha possui 12 colunas.
+
 app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = html.Div([
   dbc.Row([
     dbc.Col([
     html.H3("Dashboard Preço do Petróleo e da Gasolina.", className='text-center text-primary'),
-    html.H5("Dashboard do preço do Petróleo e da Gasolina ao longo de 20 anos.")    
+    html.H5("Dashboard do preço do Petróleo e da Gasolina ao longo de 20 anos.", className='text-center text-dark')    
     ])
     
   ]),
   dbc.Row([
     dbc.Col([
         html.P("Selecione o ano abaixo:"),
-        dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
+        dcc.Dropdown(lista_anos, value="2002", id="lista-anos", className="mb-3"),
         dcc.Graph(id='grafico-preco',
         figure=fig2)
     
@@ -161,17 +163,14 @@ app.layout = html.Div([
   ], width={'size': 6}),
     dbc.Col([
       html.P("Selecione o Estado abaixo:"),
-      dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados"),
+      dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados", className="mb-3"),
 
       dcc.Graph(
         id='grafico-medias',
         figure=fig)
         ], width={'size': 6})
-  ]),
-  dbc.Row([
-    
-    ])
-    
+  ])
+      
 ])
 
 #callback grafico 1
@@ -188,7 +187,7 @@ def update_graph(value):
 
   return fig2
 
-#callback grafico 1
+#callback grafico 2
 @app.callback(
     Output('grafico-medias', 'figure'),
     Input('lista-estados', 'value')
