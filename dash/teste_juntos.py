@@ -146,34 +146,35 @@ app.layout = html.Div([
   dbc.Row([
     dbc.Col([
     html.H3("Dashboard Preço do Petróleo e da Gasolina.", className='text-center text-primary'),
-    html.H5("Dashboard do preço do Petróleo e da Gasolina ao longo de 20 anos."),
-    html.P("Selecione o ano abaixo:")
+    html.H5("Dashboard do preço do Petróleo e da Gasolina ao longo de 20 anos.")    
     ])
     
   ]),
   dbc.Row([
     dbc.Col([
-      dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
-      dcc.Graph(id='grafico-preco',
-      figure=fig2)
+        html.P("Selecione o ano abaixo:"),
+        dcc.Dropdown(lista_anos, value="2002", id="lista-anos"),
+        dcc.Graph(id='grafico-preco',
+        figure=fig2)
     
 
   ], width={'size': 6}),
-  dbc.Row([
     dbc.Col([
-        html.P("Selecione o Estado abaixo:"),
-        dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados"),
+      html.P("Selecione o Estado abaixo:"),
+      dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados"),
 
-        dcc.Graph(
+      dcc.Graph(
         id='grafico-medias',
         figure=fig)
+        ], width={'size': 6})
+  ]),
+  dbc.Row([
+    
     ])
-    ], width={'size': 6})
-  ])
     
 ])
 
-
+#callback grafico 1
 @app.callback(
     Output('grafico-preco', 'figure'),
     Input('lista-anos', 'value')
@@ -187,7 +188,7 @@ def update_graph(value):
 
   return fig2
 
-
+#callback grafico 1
 @app.callback(
     Output('grafico-medias', 'figure'),
     Input('lista-estados', 'value')
@@ -196,7 +197,7 @@ def update_graph(value):
 def update_graph2(value):
   tabela_filtrada = media_geral_anual(value)
 
-  fig = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.')
+  fig = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.', template='plotly_dark')
 
   return fig
 
