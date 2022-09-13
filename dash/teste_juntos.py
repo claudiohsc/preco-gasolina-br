@@ -130,10 +130,12 @@ tabela_padrao = media_geral_anual('DISTRITO FEDERAL')
 
 fig = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.', template="plotly_dark")
 
-lista_estados = ['ACRE', 'ALAGOAS', 'AMAPA', 'AMAZONAS', 'BAHIA', 'CEARA','DISTRITO FEDERAL', 'ESPIRITO SANTO',
-'GOIAS', 'MARANHAO', 'MATO GROSSO', 'MATO GROSSO DO SUL', 'MINAS GERAIS', 'PARA', 'PARAIBA', 'PARANA', 
-'PERNAMBUCO', 'PIAUI', 'RIO DE JANEIRO', 'RIO GRANDE DO NORTE', 'RIO GRANDE DO SUL', 'RONDONIA', 'RORAIMA', 'SANTA CATARINA', 'SAO PAULO', 'SERGIPE', 'TOCANTINS']
+lista_estados= []
 
+#buscando todos os estados do dataframe
+for linha in range(len(preco_df)):
+    if preco_df['ESTADO'][linha] not in lista_estados:
+        lista_estados.append(preco_df['ESTADO'][linha])
 
 
 
