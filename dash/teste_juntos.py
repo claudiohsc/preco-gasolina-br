@@ -137,7 +137,6 @@ lista_estados = ['ACRE', 'ALAGOAS', 'AMAPA', 'AMAZONAS', 'BAHIA', 'CEARA','DISTR
 
 
 
-
 #Parte do dash: juntado os graficos
 
 #layout funciona com linhas, e cada linha possui 12 colunas.
