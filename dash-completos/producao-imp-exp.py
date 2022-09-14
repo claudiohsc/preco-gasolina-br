@@ -36,7 +36,7 @@ estados = []
 anos = []
 
 for linha in range(len(df_producao)):
-    if df['UF'][linha] not in estados:
+    if df_producao['UF'][linha] not in estados:
         estados.append(df_producao['UF'][linha])
 
 for linha in range(len(df_producao)):
@@ -104,7 +104,7 @@ medias_anuais = {'Ano': lista_anos,
 
 tabela_completa = pd.DataFrame(medias_anuais)
 
-fig1 = px.bar(tabela_completa, x='Ano', y=['Média Exportação do Ano', 'Média Importação do Ano'], title='Quantidade Exportada/Importada em Metros Cúbicos (M³)')
+fig1 = px.bar(tabela_completa, x='Ano', y=['Média Exportação do Ano', 'Média Importação do Ano'], title='Quantidade Exportada/Importada em Metros Cúbicos (M³)', template="plotly_dark")
 
 
 
@@ -113,35 +113,39 @@ fig1 = px.bar(tabela_completa, x='Ano', y=['Média Exportação do Ano', 'Média
 #começo do dash
 
 
-
-
-app = Dash(__name__)
+app = Dash(__name__,  external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = html.Div([
     dbc.Row([
-      html.H1("Dashboard Produção Nacional, Importação e Exportação de Petróleo no Brasil."),
-      html.H3("Dashboard das médias de Produção Nacional de Petróleo por ano.")
+      html.H4("Dashboard Produção Nacional, Importação e Exportação de Petróleo no Brasil.", className='text-center text-primary'),
     ]),
     dbc.Row([
       dbc.Col([
-        html.P("Selecione o Estado abaixo:"),
-      dcc.Dropdown(estados, value="ALAGOAS", id="lista-estados"),
-      dcc.Dropdown(anos, value='2017', id='anos'),
+      html.P("Selecione o Estado abaixo:"),
+      dcc.Dropdown(estados, value="ALAGOAS", id="lista-estados", className="mb-3"),
+      html.P("Selecione o ano abaixo:"),
+      dcc.Dropdown(anos, value='2017', id='anos', className="mb-3"),
 
       dcc.Graph(
         id='grafico-producao',
         figure={})
       ]),
-      dbc.Col([
-        html.P("Selecione o Estado abaixo:"),
     
+      dbc.Row([
+        dbc.Col([
+        
+        html.P("Selecione o ano abaixo:"),
+        dcc.Dropdown(lista_anos, )
         dcc.Graph(
         id='grafico-medias',
         figure=fig1)
       ])
+      ])
+      
     ])
     
 ])
+
 
 #Callback grafico 1 - Producao
 @app.callback(
@@ -152,9 +156,9 @@ app.layout = html.Div([
 
 def update_graph(lista_estados, ano):
   
-  tabela_estado = tabela_por_estado(df, lista_estados, int(ano)) #recebe os dois valores: producao e mês
+  tabela_estado = tabela_por_estado(df_producao, lista_estados, int(ano)) #recebe os dois valores: producao e mês
   
-  fig = px.bar(tabela_estado, x='MÊS', y='PRODUÇÃO', title=f'Preços Médios de Revenda da Gasolina Comum em {lista_estados}.')
+  fig = px.bar(tabela_estado, x='MÊS', y='PRODUÇÃO', title=f'Produção de Petróleo em {lista_estados}.', template="plotly_dark")
 
   return fig
 
