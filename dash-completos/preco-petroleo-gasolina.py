@@ -4,41 +4,9 @@ import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 
-#Grafico 1
+#Grafico 1 - Preco do Petróleo
 preco_petroleo = pd.read_excel('datasets/Preco_do_petroleo.xlsx')
 
-def mediaAno(dataframe, ano):
-  lista_ano = []
-
-  #Filtragem por ano dos valores 
-  for linha in range(len(dataframe)):
-    if dataframe['Ano'][linha] == ano:
-      lista_ano.append(dataframe['Valor'][linha])
-
-  soma_preco = sum(lista_ano)
-  qtd_valores = len(lista_ano)
-  
-  media = soma_preco / qtd_valores
-  
-
-  return round(media, 2)   #Media com duas casas decimais           
-
-lista_anos = []
-lista_medias = []
-
-
-#Criando novo dataframe com as médias de cada ano
-for ano in range(2002, 2023):
-  media_anual = 0
-  media_anual = mediaAno(preco_petroleo, ano)
-
-  lista_anos.append(ano) #adicionando os anos em uma lista
-  lista_medias.append(media_anual) #adicionando as media em uma lista
-
-medias_anuais = {'Ano': lista_anos,
-                 'Média do Ano': lista_medias}
-
-tabela_medias = pd.DataFrame(medias_anuais) #criando dataframe a partir do dicionario
 
 def valoresAno(dataframe, ano):
   valores_mes = []
@@ -58,11 +26,18 @@ def valoresAno(dataframe, ano):
   return tabela_anual
 
 
-fig2 = px.line(preco_petroleo, x='Mês', y='Valor', title='Média mensal do Preço do Petróleo')   #Gráfico da Média por Mês
+#Buscando todos os anos do dataframe
+lista_anos = []
+
+for linha in range(len(preco_petroleo)):
+    if preco_petroleo['Ano'][linha] not in lista_anos:
+        lista_anos.append(preco_petroleo['Ano'][linha]) #adicionando os anos em uma lista
+  
 
 
 
-#Grafico 2
+
+#Grafico 2 - Preco da Gasolina
 preco_df = pd.read_csv('datasets/2004-2021.csv')
 
 def precoEstado(estado, ano):
@@ -128,7 +103,7 @@ def media_geral_anual(estado):
 
 tabela_padrao = media_geral_anual('DISTRITO FEDERAL')
 
-fig = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.', template="plotly_dark")
+fig2 = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.', template="plotly_dark")
 
 lista_estados= []
 
@@ -136,6 +111,9 @@ lista_estados= []
 for linha in range(len(preco_df)):
     if preco_df['ESTADO'][linha] not in lista_estados:
         lista_estados.append(preco_df['ESTADO'][linha])
+
+
+
 
 
 
@@ -158,7 +136,7 @@ app.layout = html.Div([
         html.P("Selecione o ano abaixo:"),
         dcc.Dropdown(lista_anos, value="2002", id="lista-anos", className="mb-3"),
         dcc.Graph(id='grafico-preco',
-        figure=fig2)
+        figure={})
     
 
   ], width={'size': 6}),
@@ -168,7 +146,7 @@ app.layout = html.Div([
 
       dcc.Graph(
         id='grafico-medias',
-        figure=fig)
+        figure=fig2)
         ], width={'size': 6})
   ])
       
@@ -184,9 +162,9 @@ app.layout = html.Div([
 def update_graph(value):
   tabela_ano = valoresAno(preco_petroleo, int(value))
 
-  fig2 = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark')   #Gráfico da Média por Mês
+  fig = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark')   #Gráfico da Média por Mês
 
-  return fig2
+  return fig
 
 #callback grafico 2
 @app.callback(
@@ -197,9 +175,9 @@ def update_graph(value):
 def update_graph2(value):
   tabela_filtrada = media_geral_anual(value)
 
-  fig = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.', template='plotly_dark')
+  fig2 = px.line(tabela_filtrada, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em {value}.', template='plotly_dark')
 
-  return fig
+  return fig2
 
 
 if __name__ == '__main__':
