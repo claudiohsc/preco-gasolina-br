@@ -85,29 +85,64 @@ def lista_por_exp_imp(ano):
 
   return round(media_exp, 2), round(media_imp, 2)  #(82837.22, 183819)   #Medias com duas casas decimais   
 
+
+
+
+def tabela_anos():
+
+  lista_anos = []
+  lista_medias_exp = []
+  lista_medias_imp = []
+
+
+  for ano in range(2000, 2023):
+    media_anual = 0
+    media_anual = lista_por_exp_imp(ano) #realizando a media para cada ano
+
+    lista_anos.append(ano) #adicionando os anos em uma lista
+    lista_medias_exp.append(media_anual[0]) #adicionando as medias em uma lista
+    lista_medias_imp.append(media_anual[1])
+
+
+  #criando dicionario para transformar em dataframe
+  medias_anuais = {'Ano': lista_anos,
+                  'Média Exportação do Ano': lista_medias_exp,
+                  'Média Importação do Ano': lista_medias_imp}
+
+  tabela = pd.DataFrame(medias_anuais)
+
+  return tabela
+
+
+
+def lista_mes(ano):
+  #cria uma lista com os valores por mes do ano recebido
+  lista_meses = []
+  lista_valor_exp = []
+  lista_valor_imp = []
+
+  for linha in range(len(df_exp_imp)):
+    if df_exp_imp['ANO'][linha] == ano:
+      lista_meses.append(df_exp_imp['MÊS'][linha])
+      lista_valor_exp.append(df_exp_imp['VALOR_EXPORTAÇÃO'][linha])
+      lista_valor_imp.append(df_exp_imp['VALOR_IMPORTAÇÃO'][linha])
+  
+  medias_mensais = {'MÊS': lista_meses,
+            'VALOR_EXPORTAÇÃO': lista_valor_exp,
+            'VALOR_IMPORTAÇÃO': lista_valor_imp}
+
+  
+  tabela = pd.DataFrame(medias_mensais)
+
+  return tabela
+
+
+#Criando lista para o dropdown
 lista_anos = []
-lista_medias_exp = []
-lista_medias_imp = []
-
 for ano in range(2000, 2023):
-  media_anual = 0
-  media_anual = lista_por_exp_imp(ano) #realizando a media para cada ano
+  lista_anos.append(ano)
 
-  lista_anos.append(ano) #adicionando os anos em uma lista
-  lista_medias_exp.append(media_anual[0]) #adicionando as medias em uma lista
-  lista_medias_imp.append(media_anual[1])
-
-#criando dicionario para transformar em dataframe
-medias_anuais = {'Ano': lista_anos,
-                 'Média Exportação do Ano': lista_medias_exp,
-                 'Média Importação do Ano': lista_medias_imp}
-
-tabela_completa = pd.DataFrame(medias_anuais)
-
-fig1 = px.bar(tabela_completa, x='Ano', y=['Média Exportação do Ano', 'Média Importação do Ano'], title='Quantidade Exportada/Importada em Metros Cúbicos (M³)', template="plotly_dark")
-
-
-
+lista_anos.append('Todos os anos')
 
 
 #começo do dash
@@ -131,18 +166,18 @@ app.layout = html.Div([
         figure={})
       ]),
     
+      ]),
       dbc.Row([
         dbc.Col([
         
         html.P("Selecione o ano abaixo:"),
-        dcc.Dropdown(lista_anos, )
+        dcc.Dropdown(lista_anos, value='2000', id='anos-exp-imp', className='mb-3'),
         dcc.Graph(
-        id='grafico-medias',
-        figure=fig1)
-      ])
+        id='grafico-exp-imp',
+        figure={})
       ])
       
-    ])
+    ]),
     
 ])
 
@@ -154,7 +189,7 @@ app.layout = html.Div([
   Input('anos', 'value')
 )
 
-def update_graph(lista_estados, ano):
+def update_graph_prod(lista_estados, ano):
   
   tabela_estado = tabela_por_estado(df_producao, lista_estados, int(ano)) #recebe os dois valores: producao e mês
   
@@ -162,6 +197,24 @@ def update_graph(lista_estados, ano):
 
   return fig
 
+
+#callback Grafico 2
+
+@app.callback(
+  Output('grafico-exp-imp', 'figure'),
+  Input('anos-exp-imp', 'value')
+)
+
+def update_graph_exp(valor):
+  if valor == 'Todos os anos':
+    tabela_completa = tabela_anos()
+    fig1 = px.bar(tabela_completa, x='Ano', y=['Média Exportação do Ano', 'Média Importação do Ano'], title='Quantidade Exportada/Importada em Metros Cúbicos (M³)', template="plotly_dark")
+  
+  else:
+    tabela_meses = lista_mes(int(valor))  
+    fig1 = px.bar(tabela_meses, x='MÊS', y=['VALOR_EXPORTAÇÃO', 'VALOR_IMPORTAÇÃO'], title=f'Quantidade Exportada/Importada em Metros Cúbicos (M³) no de {valor}', template="plotly_dark")
+
+  return fig1
 
 if __name__ == '__main__':
     app.run_server(debug=True)
