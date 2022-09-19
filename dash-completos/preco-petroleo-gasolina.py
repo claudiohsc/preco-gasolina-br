@@ -5,7 +5,7 @@ from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 
 #Grafico 1 - Preco do Petróleo
-preco_petroleo = pd.read_excel('datasets/Preco_do_petroleo.xlsx')
+preco_petroleo = pd.read_excel('/home/claudio/Documentos/preco-gasolina-br/datasets/Preco_do_petroleo.xlsx')
 
 
 def valoresAno(dataframe, ano):
@@ -38,7 +38,7 @@ for linha in range(len(preco_petroleo)):
 
 
 #Grafico 2 - Preco da Gasolina
-preco_df = pd.read_csv('datasets/2004-2021.csv')
+preco_df = pd.read_csv('/home/claudio/Documentos/preco-gasolina-br/datasets/2004-2021.csv')
 
 def precoEstado(estado, ano):
   '''
@@ -101,6 +101,7 @@ def media_geral_anual(estado):
 
   return tabela_completa
 
+
 tabela_padrao = media_geral_anual('DISTRITO FEDERAL')
 
 fig2 = px.line(tabela_padrao, x='ANO', y='PREÇO MÉDIO REVENDA', title=f'Preços Médios de Revenda da Gasolina Comum em Distrito Federal.', template="plotly_dark")
@@ -162,7 +163,7 @@ app.layout = html.Div([
 def update_graph(value):
   tabela_ano = valoresAno(preco_petroleo, int(value))
 
-  fig = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark')   #Gráfico da Média por Mês
+  fig = px.bar(tabela_ano, x='Mês', y='Valor', title=f'Média mensal do Preço do Petróleo do ano {value}', template='plotly_dark') 
 
   return fig
 
@@ -181,4 +182,4 @@ def update_graph2(value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True, port=8050)

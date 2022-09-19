@@ -57,7 +57,7 @@ fig = px.bar(tabela_producao, x='MÊS', y='PRODUÇÃO', title=('PRODUÇÃO DE BA
 
 #Grafico 2 - Importacao e exportacao
 
-df_exp_imp = pd.read_excel("datasets/importacoes-exportacoes-petroleo-2000-2022_2(1).xlsx")
+df_exp_imp = pd.read_excel("datasets/importacoes-exportacoes-petroleo-2000-2022_21.xlsx")
 
 
 def lista_por_exp_imp(ano):
@@ -83,7 +83,7 @@ def lista_por_exp_imp(ano):
   
   media_imp = soma_imp / qtd_val_imp
 
-  return round(media_exp, 2), round(media_imp, 2)  #(82837.22, 183819)   #Medias com duas casas decimais   
+  return round(media_exp, 2), round(media_imp, 2)  #(82837.22, 183819.56)   #Medias com duas casas decimais   
 
 
 
@@ -217,4 +217,4 @@ def update_graph_exp(valor):
   return fig1
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True, port=8051)
