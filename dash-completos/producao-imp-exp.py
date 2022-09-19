@@ -57,7 +57,7 @@ fig = px.bar(tabela_producao, x='MÊS', y='PRODUÇÃO', title=('PRODUÇÃO DE BA
 
 #Grafico 2 - Importacao e exportacao
 
-df_exp_imp = pd.read_excel("datasets/importacoes-exportacoes-petroleo-2000-2022_2(1).xlsx")
+df_exp_imp = pd.read_excel("datasets/importacoes-exportacoes-petroleo-2000-2022_21.xlsx")
 
 
 def lista_por_exp_imp(ano):
