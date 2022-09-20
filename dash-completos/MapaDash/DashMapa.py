@@ -23,7 +23,12 @@ estados_brasil = json.load(open("brazil_geo.json", "r"))
 
 
 #Lista de Todos os Estados do Brasil
-estadosSiglas = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
+estadosSiglas = []
+
+for linha in range(len(dataFrame)):
+    if dataFrame['ESTADO'][linha] not in estadosSiglas:
+        estadosSiglas.append(dataFrame['ESTADO'][linha])
+
 
 
 #Lista para Cada Estado Do Brasil
@@ -146,8 +151,8 @@ app.layout = dbc.Container(
             dbc.Card([
                 dbc.CardBody([
                     html.Div([
-                        html.H2("Preço Médio Anual da Gasolina",style={}),
-        	            html.H3("Selecione a Data Desejada",style={}),
+                        html.H4("Preço Médio Anual da Gasolina",style={}),
+        	            html.P("Selecione a Data Desejada",style={}),
                         dcc.Dropdown(opcoes, value = '2004', id = 'botao', style = {"color": "Dark"})
                     ],style={}),         
                 ])   
@@ -175,6 +180,7 @@ clear()
     Output('mapa', 'figure'),
     Input('botao','value')
 )
+
 def update(value):
     ano = value
     
@@ -193,12 +199,12 @@ def update(value):
     autosize = True,
     margin = dict(l = 0, r = 0, t = 0, b = 0),
     showlegend = False,
-    mapbox_style="carto-darkmatter"
-)
+    mapbox_style="carto-darkmatter")
+
     clear()
     return fig
     
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8052)
 
