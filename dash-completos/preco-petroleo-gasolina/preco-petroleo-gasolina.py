@@ -135,7 +135,7 @@ app.layout = html.Div([
   dbc.Row([
     dbc.Col([
         html.P("Selecione o ano abaixo:"),
-        dcc.Dropdown(lista_anos, value="2002", id="lista-anos", className="mb-3"),
+        dcc.Dropdown(lista_anos, value="2002", id="lista-anos", className="mb-3", style = {"color": "#121212"}),
         dcc.Graph(id='grafico-preco',
         figure={})
     
@@ -143,7 +143,7 @@ app.layout = html.Div([
   ], width={'size': 6}),
     dbc.Col([
       html.P("Selecione o Estado abaixo:"),
-      dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados", className="mb-3"),
+      dcc.Dropdown(lista_estados, value="DISTRITO FEDERAL", id="lista-estados", className="mb-3", style = {"color": "#121212"}),
 
       dcc.Graph(
         id='grafico-medias',

@@ -153,7 +153,7 @@ app.layout = dbc.Container(
                     html.Div([
                         html.H4("Preço Médio Anual da Gasolina",style={}),
         	            html.P("Selecione a Data Desejada",style={}),
-                        dcc.Dropdown(opcoes, value = '2004', id = 'botao', style = {"color": "Dark"})
+                        dcc.Dropdown(opcoes, value = '2004', id = 'botao', style = {"color": "#121212"})
                     ],style={}),         
                 ])   
             ],color = "light", inverse= True)

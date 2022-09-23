@@ -5,7 +5,7 @@ from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 
 #Grafico 1 - Producao Nacional
-df_producao = pd.read_excel("ESTADOS_PETROLEO_ATUALIZADO.xlsx")
+df_producao = pd.read_excel("ESTADOS_PETROLEO_antigo.xlsx")
 
 
 def tabela_por_estado(dataframe, estado, ano):                                                
@@ -157,9 +157,9 @@ app.layout = html.Div([
     dbc.Row([
       dbc.Col([
       html.P("Selecione o Estado abaixo:"),
-      dcc.Dropdown(estados, value="ALAGOAS", id="lista-estados", className="mb-3"),
+      dcc.Dropdown(estados, value="ALAGOAS", id="lista-estados", className="mb-3", style = {"color": "#121212"}),
       html.P("Selecione o ano abaixo:"),
-      dcc.Dropdown(anos, value='2017', id='anos', className="mb-3"),
+      dcc.Dropdown(anos, value='2017', id='anos', className="mb-3", style = {"color": "#121212"}),
 
       dcc.Graph(
         id='grafico-producao',
@@ -171,7 +171,7 @@ app.layout = html.Div([
         dbc.Col([
         
         html.P("Selecione o ano abaixo:"),
-        dcc.Dropdown(lista_anos, value='2000', id='anos-exp-imp', className='mb-3'),
+        dcc.Dropdown(lista_anos, value='2000', id='anos-exp-imp', className='mb-3', style = {"color": "#121212"}),
         dcc.Graph(
         id='grafico-exp-imp',
         figure={})
